@@ -1,0 +1,1231 @@
+###############################################################################
+#
+# SERVICE GROUP DEFINITION
+#
+###############################################################################
+
+define host{
+	use				windows-server
+	host_name			TunelVerde
+	alias				TunelVerde
+	address				10.195.35.10
+	check_command			check-rds-1320
+	notifications_enabled		1
+	check_interval			3
+	notification_period		24x7
+	notification_interval		5
+	notification_options		d,u,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+define host{
+        use                             windows-server
+        host_name                       TunelVerde.Top
+        alias                           TunelVerde.Top
+        address                         10.195.35.14
+        check_command                   check-rds-1325
+        notifications_enabled           1
+        check_interval                  3
+        notification_period             24x7
+        notification_interval           5
+        notification_options            d,u,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define host{
+        use                             windows-server
+        host_name                       TunelVerde.Top.Tst
+        alias                           TunelVerde.Top.Tst
+        address                         10.195.35.11
+        check_command                   check-rds-host-alive
+        notifications_enabled           1
+        check_interval                  3
+        notification_period             24x7
+        notification_interval           5
+        notification_options            d,u,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+define host{
+	use				windows-server       
+        host_name                       TunelVerde.DB
+        alias                           TunelVerde.DB
+        address                         10.195.35.12
+        check_command                   check-rds-host-alive
+        notifications_enabled           1
+        check_interval                  3
+        notification_period             24x7
+        notification_interval           5
+        notification_options            d,u,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+
+###############################################################################
+#
+# SERVICE GROUP DEFINITION
+#
+###############################################################################
+
+define servicegroup{
+	servicegroup_name	TunelVerde
+	alias			TunelVerde
+	members			TunelVerde,TunelVerde.NSClientVersion,TunelVerde,TunelVerde.Uptime,TunelVerde,TunelVerde.Time
+	members			TunelVerde,TunelVerde.CPULoad
+	members			TunelVerde,TunelVerde.MemoryUsage
+	members			TunelVerde,TunelVerde.DriveC,TunelVerde,TunelVerde.DriveE,TunelVerde,TunelVerde.DriveZ
+	
+	members			TunelVerde,TunelVerde.Protheus.Pruebas
+
+	members			TunelVerde,TunelVerde.Protheus.Produccion
+
+	members			TunelVerde,TunelVerde.Pruebas.P12,TunelVerde,TunelVerde.Pruebas.WS.P12
+	members			TunelVerde,TunelVerde.Produccion.WS.P12
+
+	members                 TunelVerde,TunelVerde.Fluig
+	members			TunelVerde,TunelVerde.FluigIndexer
+	members			TunelVerde,TunelVerde.FluigRealTime
+
+	members			TunelVerde.Top.Tst,TunelVerde.Fluig.TST
+	members			TunelVerde.Top.Tst,TunelVerde.FluigIndexer.TST
+	members			TunelVerde.Top.Tst,TunelVerde.FluigRealTime.TST	
+
+
+	members			TunelVerde.Top,TunelVerde.Produccion.TOP.P12
+	members			TunelVerde.Top.Tst,TunelVerde.Pruebas.TOP.P12
+
+	members			TunelVerde,TunelVerde.RPO
+
+	members			TunelVerde,TunelVerde.Licencias
+
+	members			TunelVerde.DB,TunelVerde.DBAcces
+
+	members 		TunelVerde.Top.Tst,TunelVerde.Top.Tst.NSClientVersion,TunelVerde.Top.Tst,TunelVerde.Top.Tst.Uptime
+	members			TunelVerde.Top.Tst,TunelVerde.Top.Tst.Time
+	members			TunelVerde.Top.Tst,TunelVerde.Top.Tst.CPULoad,TunelVerde.Top.Tst,TunelVerde.Top.Tst.MemoryUsage
+	members			TunelVerde.Top.Tst,TunelVerde.Top.Tst.DriveC,TunelVerde.Top.Tst,TunelVerde.Top.Tst.DriveZ
+
+	members                 TunelVerde.Top,TunelVerde.Top.NSClientVersion,TunelVerde.Top,TunelVerde.Top.Uptime
+        members                 TunelVerde.Top,TunelVerde.Top.Time
+        members                 TunelVerde.Top,TunelVerde.Top.CPULoad,TunelVerde.Top,TunelVerde.Top.MemoryUsage
+        members			TunelVerde.Top,TunelVerde.Top.DriveC
+
+	members                 TunelVerde.DB,TunelVerde.DB.NSClientVersion,TunelVerde.DB,TunelVerde.DB.Uptime
+        members                 TunelVerde.DB,TunelVerde.DB.Time
+        members                 TunelVerde.DB,TunelVerde.DB.CPULoad,TunelVerde.DB,TunelVerde.DB.MemoryUsage
+	members			TunelVerde.DB,TunelVerde.DB.DriveC,TunelVerde.DB,TunelVerde.DB.DriveE
+		
+	members			TunelVerde.DB,TunelVerde.DB.InstanceCPU
+	members			TunelVerde.DB,TunelVerde.DB.InstanceDeadlocks
+	members			TunelVerde.DB,TunelVerde.DB.InstanceFullScans
+	members			TunelVerde.DB,TunelVerde.DB.InstanceIO
+	members			TunelVerde.DB,TunelVerde.DB.InstanceTransactions
+	members			TunelVerde.DB,TunelVerde.DB.InstanceUsers
+	members			TunelVerde.DB,TunelVerde.DB.InstanceJobs
+	members			TunelVerde.DB,TunelVerde.DB.InstanceOnline
+	members			TunelVerde.DB,TunelVerde.DB.InstanceMemory
+
+	members			TunelVerde.DB,TunelVerde.TOP.BackupDB
+	members			TunelVerde.DB,TunelVerde.FLG.BackupDB
+	members			TunelVerde.DB,TunelVerde.BackupDB
+
+	members			TunelVerde,TunelVerde.ErrorBKP,TunelVerde,TunelVerde.BackupAP
+	}
+
+
+
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS PRUEBAS TOP
+#
+###############################################################################
+###############################################################################
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.NSClientVersion
+	check_command		check_nt!CLIENTVERSION
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.Uptime
+	check_command		check_nt!UPTIME
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.Time
+	check_command		check_nrpewin!check_ntp_time
+	check_interval		10
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	30
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.CPULoad
+	check_command		check_nt!CPULOAD!-l 5,80,90
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.MemoryUsage
+	check_command		check_nt!MEMUSE!-w 85 -c 95
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.DriveC
+	check_command		check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+
+define service{
+	use			generic-service
+	host_name		TunelVerde.Top.Tst
+	service_description	TunelVerde.Top.Tst.DriveZ
+	check_command		check_nt!USEDDISKSPACE!-l z -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+
+
+
+	
+
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS DB
+#
+###############################################################################
+###############################################################################
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.NSClientVersion
+        check_command           check_nt!CLIENTVERSION
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.Uptime
+        check_command           check_nt!UPTIME
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.Time
+        check_command           check_nrpewin!check_ntp_time
+        check_interval          10
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   30
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.CPULoad
+        check_command           check_nt!CPULOAD!-l 5,80,90
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.MemoryUsage
+        check_command           check_nt!MEMUSE!-w 85 -c 95
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.DriveC
+        check_command           check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.DB
+        service_description     TunelVerde.DB.DriveE
+        check_command           check_nt!USEDDISKSPACE!-l e -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+
+
+
+
+	
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS PRODUCCION
+#
+###############################################################################
+###############################################################################
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.NSClientVersion
+	check_command		check_nt!CLIENTVERSION
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.Uptime
+	check_command		check_nt!UPTIME
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.Time
+	check_command		check_nrpewin!check_ntp_time
+	check_interval		10
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	30
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		nomail
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.CPULoad
+	check_command		check_nt!CPULOAD!-l 5,80,90
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.MemoryUsage
+	check_command		check_nt!MEMUSE!-w 85 -c 95
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.DriveC
+	check_command		check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+	
+	
+	
+	
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.DriveE
+	check_command		check_nt!USEDDISKSPACE!-l e -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.DriveZ
+	check_command		check_nt!USEDDISKSPACE!-l z -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+
+
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS PR TOP
+#
+###############################################################################
+###############################################################################
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.Top
+        service_description     TunelVerde.Top.NSClientVersion
+        check_command           check_nt!CLIENTVERSION
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.Top
+        service_description     TunelVerde.Top.Uptime
+        check_command           check_nt!UPTIME
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.Top
+        service_description     TunelVerde.Top.Time
+        check_command           check_nrpewin!check_ntp_time
+        check_interval          10
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   30
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.Top
+        service_description     TunelVerde.Top.CPULoad
+        check_command           check_nt!CPULOAD!-l 5,80,90
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.Top
+        service_description     TunelVerde.Top.MemoryUsage
+        check_command           check_nt!MEMUSE!-w 85 -c 95
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+define service{
+        use                     generic-service
+        host_name               TunelVerde.Top
+        service_description     TunelVerde.Top.DriveC
+        check_command           check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+
+
+
+	
+	
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS DB
+#
+###############################################################################
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceCPU
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!cpu-busy!80!90
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceDeadlocks
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!locks-deadlocks!1!5
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceFullScans
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!full-scans!250!275
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceIO
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!io-busy!80!90
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceTransactions
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!transactions!10000!20000
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description    		TunelVerde.DB.InstanceUsers
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!connected-users!350!450
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+ 	notification_interval         	10
+	notification_options            w,u,c,r,f,s
+    	register                        1
+	contact_groups                  admins
+	contacts                        aponce
+     }
+
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceOnline
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!database-online!!
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceJobs
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!failed-jobs!1!5 --lookback 720
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.DB.InstanceMemory
+        check_command                   check_mssql!8099!nagios!TRx2a*]X!total-server-memory!14680064!16777216
+        check_interval                  5
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+###############################################################################
+#
+# RPO FILES DEFINITIONS
+#
+###############################################################################
+
+define service{
+	use				generic-service
+	host_name			TunelVerde
+	service_description		TunelVerde.RPO
+	check_command			check_nrpe!check_winfile!'E:\\totvs\\erproot\\protheus12\\apo'!5!6
+	check_interval			480
+	check_period			24x7
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+
+###############################################################################
+#
+# ENVIRONMENT CHECKS DEFINITIONS
+#
+###############################################################################
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.Protheus.Pruebas
+        check_command                   check_protheus!10110!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.Protheus.Produccion
+        check_command                   check_protheus!10105!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+###############################################################################
+#
+# ERP PRODUCTION SERVICES DEFINITIONS
+#
+###############################################################################
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.Produccion.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRDBRKMST
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.Produccion.WS.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRDWS
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.Top
+        service_description             TunelVerde.Produccion.TOP.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l RM.Host.Service
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+###############################################################################
+#
+# ERP PRUEBAS SERVICES DEFINITIONS
+#
+###############################################################################
+
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.Pruebas.WS.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRBWS
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.Pruebas.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRB
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.Top.Tst
+        service_description             TunelVerde.Pruebas.TOP.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l RM.Host.Service
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+###############################################################################
+#
+# FLUIG PRODUCTION SERVICES DEFINITIONS
+#
+###############################################################################	
+	
+	define service{
+	use				generic-service
+	host_name			TunelVerde
+	service_description		TunelVerde.Fluig
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+	define service{
+	use				generic-service
+	host_name			TunelVerde
+	service_description		TunelVerde.FluigIndexer
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig_Indexer
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+	
+	define service{
+	use				generic-service
+	host_name			TunelVerde
+	service_description		TunelVerde.FluigRealTime
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig_RealTime
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}	
+	
+
+	define service{
+	use				generic-service
+	host_name			TunelVerde.Top.Tst
+	service_description		TunelVerde.Fluig.TST
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+	define service{
+	use				generic-service
+	host_name			TunelVerde.Top.Tst
+	service_description		TunelVerde.FluigIndexer.TST
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig_Indexer
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+	
+	define service{
+	use				generic-service
+	host_name			TunelVerde.Top.Tst
+	service_description		TunelVerde.FluigRealTime.TST
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig_RealTime
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}	
+	
+###############################################################################
+#
+# FLUIG PRUEBAS SERVICES DEFINITIONS
+#
+###############################################################################	
+	
+###############################################################################
+#
+# DBACCESS DEFINITIONS
+#
+###############################################################################
+
+
+
+define service{
+	use				generic-service
+	host_name			TunelVerde.DB
+	service_description		TunelVerde.DBAcces
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l dbaccess
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		5400
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}	
+	
+###############################################################################
+#
+# LICENSE DEFINITIONS
+#
+###############################################################################
+
+
+define service{
+	use			generic-service
+	host_name		TunelVerde
+	service_description	TunelVerde.Licencias
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l licenseVirtual
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1	
+	contact_groups		admins
+	contacts		aponce
+	}
+
+###############################################################################
+#
+# BACKUP DEFINITIONS
+#
+###############################################################################
+
+
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.BackupDB
+        check_command                   check_backup!CheckFiles!path='E:\\backupdb\\'!pattern='*DADOSPRD*.tcdb'!"filter=written > -1d and size gt 6000b"!max-dir-depth=1!MinCrit=0
+        check_interval                  480
+        check_period                    24x7
+        check_freshness                 1
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           3480
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.TOP.BackupDB
+        check_command                   check_backup!CheckFiles!path='E:\\backupdb\\'!pattern='*CORPORERM*.tcdb'!"filter=written > -1d and size gt 6000b"!max-dir-depth=1!MinCrit=0
+        check_interval                  480
+        check_period                    24x7
+        check_freshness                 1
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           3480
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }        
+
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde.DB
+        service_description             TunelVerde.FLG.BackupDB
+        check_command                   check_backup!CheckFiles!path='E:\\backupdb\\'!pattern='*TFCQPL*.tcdb'!"filter=written > -1d and size gt 6000b"!max-dir-depth=1!MinCrit=0
+        check_interval                  480
+        check_period                    24x7
+        check_freshness                 1
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           3480
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }     
+
+###############################################################################
+#
+# BACKUP DEFINITIONS
+#
+###############################################################################
+
+define service{
+	use				generic-service
+	host_name			TunelVerde
+	service_description		TunelVerde.BackupAP
+	check_command			check_backup!CheckFiles!path='e:\\totvs\\backup\\'!pattern='*TFCQPL*.tcab'!"filter=written > -1d and size gt 4194304b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+###############################################################################					
+#					
+# BACKUP ERROR STATUS DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+
+define service{
+        use                             generic-service
+        host_name                       TunelVerde
+        service_description             TunelVerde.ErrorBKP
+        check_command                   check_nrpe!check_winfile2!'e:\\totvs\\backup\\\\err'!0!1
+        check_interval                  720
+        check_period                    24x7
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           720
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
