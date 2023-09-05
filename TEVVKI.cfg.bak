@@ -169,7 +169,7 @@ define servicegroup{
 	members		Charras,Charras.Produccion.SLV4.P11,Charras,Charras.Produccion.SFA.P11
 	members		Charras,Charras.Produccion.SFA2.P11,Charras,Charras.Produccion.COMP.P11
 	members		Charras,Charras.Produccion.WS.P11
-	members		Charras,Charras.Pruebas.P11,Charras,Charras.Pruebas.WS.P11
+	members		Charras,Charras.Pruebas.P11,Charras
 	members		Charras,Charras.CtreeSrvr,Charras,Charras.MCSServer
 
 	members         Charras.SLV1,Charras.Produccion.SLV6.P11,Charras.SLV1,Charras.Produccion.SLV7.P11
@@ -1495,25 +1495,6 @@ define service{
         contact_groups                  admins
         contacts                        aponce,LRcharras,scharras
         }  
-
-define service{
-        use                             generic-service
-        host_name                       Charras
-        service_description             Charras.Pruebas.WS.P11
-        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P11_PRB_WS
-       	check_interval                  3
-        check_period                    24x7
-        check_freshness                 1
-        freshness_threshold             900
-        notifications_enabled           1
-        notification_period             aspxprs
-        notification_interval           10
-        notification_options            w,u,c,r,f,s
-        register                        1
-        contact_groups                  admins
-        contacts                        aponce,LRcharras,scharras
-        }  
-
 
 
 
