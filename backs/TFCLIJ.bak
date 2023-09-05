@@ -1,0 +1,1236 @@
+					
+###############################################################################					
+#					
+# HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Define a host for the Windows machine well be monitoring					
+# Change the host_name, alias, and address to fit your situation					
+
+
+define host{
+        use                             windows-server
+        host_name                       Arvensis.Flg
+        alias                           Arvensis.Flg
+        address                         10.195.34.88
+        check_command                   check-rds-host-alive
+        notifications_enabled           1
+        check_interval                  3
+        notification_period             24x7
+        notification_interval           5
+        notification_options            d,u,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define host{
+        use                             windows-server
+        host_name                       Arvensis.Flg.Tst
+        alias                           Arvensis.Flg.Tst
+        address                         10.195.34.87
+        check_command                   check-rds-host-alive
+        notifications_enabled           1
+        check_interval                  3
+        notification_period             24x7
+        notification_interval           5
+        notification_options            d,u,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+					
+define host{
+        use                             windows-server
+        host_name                       Arvensis
+        alias                           Arvensis
+        address                         10.195.41.13
+        check_command                   check-rds-1459
+        notifications_enabled           1
+        check_interval                  3
+        notification_period             24x7
+        notification_interval           5
+        notification_options            d,u,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+
+
+					
+###############################################################################					
+#					
+# HOST GROUP DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+# Define a hostgroup for Windows machines					
+# All hosts that use the windows-server template will automatically be a member of this group					
+
+###############################################################################					
+#					
+# SERVICEGROUPS DEFINITIONS					
+#					
+###############################################################################					
+
+define servicegroup{
+	servicegroup_name	Arvensis
+	alias			Arvensis
+	members			Arvensis,Arvensis.DBAccess
+	members			Arvensis,Arvensis.Licencias
+	members			Licencias,Arvensis.Licencias.Flg
+
+	members			Arvensis,Arvensis.Desarrollo.P12
+	members			Arvensis,Arvensis.Pruebas.P12
+	members			Arvensis,Arvensis.Produccion.P12
+	members			Arvensis,Arvensis.Produccion.SLV1.P12,Arvensis,Arvensis.Produccion.SLV2.P12
+	members			Arvensis,Arvensis.Produccion.P12.WS
+	members			Arvensis,Arvensis.RPO
+	members			Arvensis,Arvensis.Protheus.Produccion
+	members			Arvensis,Arvensis.Protheus.Produccion.SLV1
+	members			Arvensis,Arvensis.Protheus.Produccion.SLV2
+	members			Arvensis,Arvensis.Protheus.Pruebas
+	members			Arvensis,Arvensis.Protheus.Desarrollo
+
+	members			Arvensis,Arvensis.Produccion.ErrorBKP
+	members			SemiCorp.DB,Arvensis.BackupDB
+	members			Arvensis,Arvensis.BackupAP
+	
+	members			Arvensis,Arvensis.NSClientVersion,Arvensis,Arvensis.Uptime
+	members			Arvensis,Arvensis.Time,Arvensis,Arvensis.CPULoad,Arvensis,Arvensis.MemoryUsage
+	members			Arvensis,Arvensis.DriveC,Arvensis,Arvensis.DriveE,Arvensis,Arvensis.DriveF
+	members			Arvensis,Arvensis.AppserverMemory
+
+	members			Arvensis.Flg,Arvensis.Flg.NSClientVersion,Arvensis.Flg,Arvensis.Flg.Uptime
+	members			Arvensis.Flg,Arvensis.Flg.Time,Arvensis.Flg,Arvensis.Flg.CPULoad,Arvensis.Flg,Arvensis.Flg.MemoryUsage
+	members			Arvensis.Flg,Arvensis.Flg.DriveC,Arvensis.Flg,Arvensis.Flg.DriveZ
+
+	members			Arvensis.Flg.Tst,Arvensis.Flg.Tst.NSClientVersion,Arvensis.Flg.Tst,Arvensis.Flg.Tst.Uptime
+	members			Arvensis.Flg.Tst,Arvensis.Flg.Tst.Time,Arvensis.Flg.Tst,Arvensis.Flg.Tst.CPULoad
+	members			Arvensis.Flg.Tst,Arvensis.Flg.Tst.MemoryUsage
+	members			Arvensis.Flg.Tst,Arvensis.Flg.Tst.DriveC,Arvensis.Flg.Tst,Arvensis.Flg.Tst.DriveZ
+
+	members			Arvensis.Flg,Arvensis.Flg.Fluig,Arvensis.Flg,Arvensis.Flg.FluigIndexer
+	members			Arvensis.Flg,Arvensis.Flg.FluigRealTime
+
+	members			Arvensis.Flg.Tst,Arvensis.Flg.Tst.Fluig,Arvensis.Flg.Tst,Arvensis.Flg.Tst.FluigIndexer
+	members			Arvensis.Flg.Tst,Arvensis.Flg.Tst.FluigRealTime
+
+	members 		Produccion.Fluig.BD,Arvensis.Flg.BackupDB	
+
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# GENERIC SERVICE DEFINITIONS FLG TST					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+# Create a service for monitoring the version of NSCLient++ that is installed					
+# Change the host_name to match the name of the host you defined above					
+
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.NSClientVersion
+	check_command		check_nt!CLIENTVERSION
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.Uptime
+	check_command		check_nt!UPTIME
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.Time
+	check_command		check_nrpewin!check_ntp_time
+	check_interval		10
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	30
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.CPULoad
+	check_command		check_nt!CPULOAD!-l 5,80,90
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.MemoryUsage
+	check_command		check_nt!MEMUSE!-w 85 -c 95
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.DriveC
+	check_command		check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+	
+define service{
+        use                     generic-service
+        host_name               Arvensis.Flg.Tst
+        service_description     Arvensis.Flg.Tst.DriveZ
+        check_command           check_nt!USEDDISKSPACE!-l z -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+				
+
+
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS FLG 
+#
+###############################################################################
+###############################################################################
+
+
+# Create a service for monitoring the version of NSCLient++ that is installed
+# Change the host_name to match the name of the host you defined above
+
+
+
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.NSClientVersion
+	check_command		check_nt!CLIENTVERSION
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.Uptime
+	check_command		check_nt!UPTIME
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.Time
+	check_command		check_nrpewin!check_ntp_time
+	check_interval		10
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	30
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		nomail
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.CPULoad
+	check_command		check_nt!CPULOAD!-l 5,80,90
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.MemoryUsage
+	check_command		check_nt!MEMUSE!-w 85 -c 95
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.DriveC
+	check_command		check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+	check_interval		3
+	notifications_enabled	1
+	notification_period	24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+define service{
+        use                     generic-service
+        host_name               Arvensis.Flg
+        service_description     Arvensis.Flg.DriveZ
+        check_command           check_nt!USEDDISKSPACE!-l z -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+
+
+
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS ERP
+#
+###############################################################################
+###############################################################################
+
+
+# Create a service for monitoring the version of NSCLient++ that is installed
+# Change the host_name to match the name of the host you defined above
+
+
+
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.NSClientVersion
+        check_command           check_nt!CLIENTVERSION
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.Uptime
+        check_command           check_nt!UPTIME
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.Time
+        check_command           check_nrpewin!check_ntp_time
+        check_interval          10
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   30
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                nomail
+        }
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.CPULoad
+        check_command           check_nt!CPULOAD!-l 5,80,90
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.MemoryUsage
+        check_command           check_nt!MEMUSE!-w 85 -c 95
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.DriveC
+        check_command           check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.DriveE
+        check_command           check_nt!USEDDISKSPACE!-l e -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+define service{
+        use                     generic-service
+        host_name               Arvensis
+        service_description     Arvensis.DriveF
+        check_command           check_nt!USEDDISKSPACE!-l f -w 90 -c 95
+        check_interval          3
+        notifications_enabled   1
+        notification_period     24x7
+        notification_interval   10
+        notification_options    w,u,c,r,f,s
+        register                1
+        contact_groups          admins
+        contacts                aponce
+        }
+
+
+
+
+
+
+
+
+
+
+###############################################################################
+###############################################################################
+#					
+# UPTIME HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# NTP TIME DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CPU LOAD DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# MEMORY HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+
+define service{
+	use			generic-service
+	host_name		Arvensis
+	service_description	Arvensis.AppserverMemory
+	check_command		check_nrpe!check_process!"filter=(exe = 'totvsappserver.exe' or exe = 'appserver.exe') and working_set > 128m"!"warn=working_set > 1741m"!"detail-syntax=%(command_line)"
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register				1
+	contact_groups			admins
+	contacts				aponce
+	}					
+					
+###############################################################################					
+###############################################################################					
+#					
+# DISK USAGE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# WEB SERVICES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# EXPRESS DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# TEST DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+
+
+###############################################################################
+#
+# ENVIRONMENT CHECKS DEFINITIONS
+#
+###############################################################################
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Protheus.Produccion
+        check_command                   check_protheus!1401!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Protheus.Produccion.SLV1
+        check_command                   check_protheus!1446!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Protheus.Produccion.SLV2
+        check_command                   check_protheus!1404!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Protheus.Pruebas
+        check_command                   check_protheus!1440!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Protheus.Desarrollo
+        check_command                   check_protheus!1442!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+
+###############################################################################					
+#					
+# PROTHEUS EXPRESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Produccion.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRD
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Produccion.SLV1.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRDSLV1
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Produccion.SLV2.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRDSLV2
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS CORPORATE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS TEST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Arvensis
+	service_description		Arvensis.Desarrollo.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12DES
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+
+define service{
+	use				generic-service
+	host_name			Arvensis
+	service_description		Arvensis.Pruebas.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12TST
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# WS PRODUCCION DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Produccion.P12.WS
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12PRDWS
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+###############################################################################
+###############################################################################
+#
+# WS PRUEBAS DEFINITIONS
+#
+###############################################################################
+###############################################################################
+
+
+
+
+
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+define service{
+	use				generic-service
+	host_name			Arvensis
+	service_description		Arvensis.DBAccess
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l DBACCESS_TFCLIJ
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# LICENSE SERVERS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Licencias
+	service_description		Arvensis.Licencias.Flg
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l TOTVSLicArvensis
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900rvensis.BackupDB
+
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Licencias
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l LicenseVirtual
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900rvensis.BackupDB
+
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+
+###############################################################################					
+###############################################################################					
+#					
+#  GENERIC RPO FILES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Arvensis
+	service_description		Arvensis.RPO
+	check_command			check_nrpe!check_winfile!'E:\\totvs\\erproot\\protheus12\\apo'!7!8
+	check_interval			480
+	check_period			24x7
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+		
+###############################################################################					
+###############################################################################					
+#					
+# APPSERVER.EXE MEMORY DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS GENERAL STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# FLUIG SERVICES STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+
+	define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.Fluig
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l fluig
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+	
+	define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.FluigIndexer
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l fluig_Indexer
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+	
+	define service{
+	use			generic-service
+	host_name		Arvensis.Flg
+	service_description	Arvensis.Flg.FluigRealTime
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l fluig_RealTime
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+	
+
+	
+###############################################################################
+#
+# FLUIG PRUEBAS SERVICES DEFINITIONS
+#
+###############################################################################	
+	
+
+	define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.Fluig
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l fluig
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+
+	define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.FluigIndexer
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l fluig_Indexer
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}
+	
+	define service{
+	use			generic-service
+	host_name		Arvensis.Flg.Tst
+	service_description	Arvensis.Flg.Tst.FluigRealTime
+	check_command		check_nt!SERVICESTATE!-d SHOWALL -l fluig_RealTime
+	check_interval		3
+	check_period		24x7
+	check_freshness		1
+	freshness_threshold	900
+	notifications_enabled	1
+	notification_period	aspxprs
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register		1
+	contact_groups		admins
+	contacts		aponce
+	}	
+
+###############################################################################					
+###############################################################################					
+#					
+# FLUIG DATABASE BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################		
+
+define service{
+        use                             generic-service
+        host_name                       Produccion.Fluig.BD
+        service_description             Arvensis.Flg.BackupDB
+        check_command                   check_backup!CheckFiles!path='\\cloudmxxprs\\backupflg\\TFCLIJ'!pattern='*TFCLIJ*.tcdb'!"filter=written > -1d and size gt 6000b"!max-dir-depth=1!MinCrit=0
+        check_interval                  480
+        check_period                    24x7
+        check_freshness                 1
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           3480
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+###############################################################################					
+###############################################################################					
+#					
+# APPLICATION DATABASE BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			SemiCorp.DB
+	service_description		Arvensis.BackupDB
+	check_command			check_backup!CheckFiles!path='F:\\backupdb\\TFCLIJ'!pattern='*TFCLIJ*.tcdb'!"filter=written > -1d and size gt 4194304b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+
+
+	
+###############################################################################					
+###############################################################################					
+#					
+# APPLICATION BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Arvensis
+	service_description		Arvensis.BackupAP
+	check_command			check_backup!CheckFiles!path='F:\\backup'!pattern='*TFCLIJ*.tcab'!"filter=written > -1d and size gt 1600000b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+					
+							
+###############################################################################					
+#					
+# APPLICATION BACKUP ERROR STATUS DEFINITIONS 					
+#					
+###############################################################################					
+
+define service{
+        use                             generic-service
+        host_name                       Arvensis
+        service_description             Arvensis.Produccion.ErrorBKP
+        check_command                   check_nrpe!check_winfile2!'F:\\backup\\err'!0!1
+        check_interval                  720
+        check_period                    24x7
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           720
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+			
+
+		
