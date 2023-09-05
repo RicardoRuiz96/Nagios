@@ -185,7 +185,7 @@ define service{
 	service_description	Raymond.Licencias
 	check_command		check_nt!SERVICESTATE!-d SHOWALL -l TOTVSLicVicRaymond
 	check_interval		3
-	check_period		aspxprs
+	check_period		charras
 	check_freshness		1
 	freshness_threshold	900
 	notifications_enabled	1
