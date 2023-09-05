@@ -137,10 +137,10 @@ define servicegroup{
 
 	members		Osroca,Osroca.Protheus.Master.PRD,Osroca,Osroca.Protheus.SLV1.PRD
 	members		Osroca,Osroca.Protheus.SLV2.PRD,Osroca,Osroca.Protheus.WS.PRD
-	members		Osroca,Osroca.Protheus.DES
+	members		Osroca,Osroca.Protheus.WS.DES,Osroca,Osroca.Protheus.DES
 	members		Osroca,Osroca.Produccion.Master.P33,Osroca,Osroca.Produccion.SLV1.P33
 	members		Osroca,Osroca.Produccion.SLV2.P33,Osroca,Osroca.Produccion.WS.P33
-	members		Osroca,Osroca.Produccion.DES.P33
+	members		Osroca,Osroca.Produccion.DES.P33,Osroca,Osroca.Produccion.DES.WS.P33
 	members		Osroca,Osroca.Licencias,Osroca,Osroca.RPO,Osroca,Osroca.AppserverMemory
 }
 
@@ -965,7 +965,23 @@ define service{
         contacts                        aponce,osroca
         }
 
-
+define service{
+        use                             generic-service
+       host_name                       	Osroca
+        service_description             Osroca.Protheus.WS.DES
+        check_command                   check_protheus!10906!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce,osroca
+        }
 
 define service{
         use                             generic-service
@@ -1088,6 +1104,23 @@ define service{
         }        
 
 
+define service{
+        use                             generic-service
+        host_name                       Osroca
+        service_description             Osroca.Produccion.DES.WS.P33
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12.33_TFATR7_DES_10906_OSROCA_WS
+       check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce,osroca
+        }
 
 
 ###############################################################################					
