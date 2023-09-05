@@ -1,0 +1,513 @@
+					
+###############################################################################					
+#					
+# HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Define a host for the Windows machine well be monitoring					
+# Change the host_name, alias, and address to fit your situation					
+					
+					
+###############################################################################					
+#					
+# HOST GROUP DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+# Define a hostgroup for Windows machines					
+# All hosts that use the windows-server template will automatically be a member of this group					
+
+###############################################################################					
+#					
+# SERVICEGROUPS DEFINITIONS					
+#					
+###############################################################################	
+
+define servicegroup{
+	servicegroup_name	Agricolas
+	alias			Agricolas
+	members			Produccion,Agricolas.BackupAP,Produccion.BD,Agricolas.BackupDB
+	members			Produccion,Agricolas.Protheus.Produccion
+	members			Pruebas,Agricolas.Protheus.Desarrollo
+	members			Pruebas,Agricolas.Protheus.Pruebas
+	members			Produccion,Agricolas.Produccion.ErrorBKP			
+	members			Pruebas,Agricolas.Desarrollo.P12,DBAccess01,Agricolas.DBAccess
+	members			Licencias,Agricolas.Licencias,Produccion,Agricolas.Produccion.P12
+	members			Pruebas,Agricolas.Pruebas.P12,Pruebas,Agricolas.Pruebas.RPO
+	members			Produccion,Agricolas.Produccion.RPO
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# GENERIC SERVICE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+# Create a service for monitoring the version of NSCLient++ that is installed					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# UPTIME HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# NTP TIME DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CPU LOAD DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# MEMORY HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# DISK USAGE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# WEB SERVICES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# EXPRESS DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# TEST DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS EXPRESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+define service{
+	use				generic-service
+	host_name			Produccion
+	service_description		Agricolas.Produccion.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.23_TFCFPO_PRD_1210_AGRICOLA
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+		
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS CORPORATE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS TEST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Agricolas.Desarrollo.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.23_TFCFPO_DES_1262_AGRICOLA
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Agricolas.Pruebas.P12
+	check_command			check_nt!SERVICESTATE! -d SHOWALL -l P12.23_TFCFPO_TST_1261_AGRICOLA
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+###############################################################################					
+###############################################################################					
+#					
+# SMARTCLIENT HTML DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			DBAccess01
+	service_description		Agricolas.DBAccess
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l DBACCESS_TFCFPO
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# LICENSE SERVERS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Licencias
+	service_description		Agricolas.Licencias
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l TOTVSLicCAJASAGRI
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+					
+
+###############################################################################					
+###############################################################################					
+#					
+# DATABASE BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+define service{
+	use				generic-service
+	host_name			Produccion.BD
+	service_description		Agricolas.BackupDB
+	check_command			check_backup!CheckFiles!path='\\cloudmxxprs\\backupdb\\TFCFPO'!pattern='*TFCFPO*.tcdb'!"filter=written > -1d and size gt 2194304b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+    
+###############################################################################					
+###############################################################################					
+#					
+# APPLICATION BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Produccion
+	service_description		Agricolas.BackupAP
+	check_command			check_backup!CheckFiles!path='\\cloudmxxprs\\backupap\\TFCFPO'!pattern='*TFCFPO*.tcab'!"filter=written > -1d and size gt 4194304b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# RPO FILES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Produccion
+	service_description		Agricolas.Produccion.RPO
+	check_command			check_nrpe!check_winfile!'E:\\outsourcing\\clientes\\TFCFPO\\Protheus12\\apo'!3!4
+	check_interval			480
+	check_period			24x7
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+###############################################################################
+###############################################################################
+#
+# TEST RPO FILES DEFINITIONS
+#
+###############################################################################
+###############################################################################
+
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Agricolas.Pruebas.RPO
+	check_command			check_nrpe!check_winfile!'e:\\Outsourcing\\Clientes\\TFCFPO\\Protheus12\\apo'!2!3
+	check_interval			480
+	check_period			24x7
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+			
+					
+###############################################################################					
+###############################################################################					
+#					
+# APPSERVER.EXE MEMORY DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS GENERAL STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+define service{
+        use                             generic-service
+        host_name                       Produccion
+        service_description             Agricolas.Protheus.Produccion
+        check_command                   check_protheus!1210!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+define service{
+        use                             generic-service
+        host_name                       Pruebas
+        service_description             Agricolas.Protheus.Desarrollo
+        check_command                   check_protheus!1262!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+     define service{
+        use                             generic-service
+        host_name                       Pruebas
+        service_description             Agricolas.Protheus.Pruebas
+        check_command                   check_protheus!1261!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# FLUIG SERVICES STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+#					
+# BACKUP ERROR STATUS DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+
+define service{
+        use                             generic-service
+        host_name                       Produccion
+        service_description             Agricolas.Produccion.ErrorBKP
+        check_command                   check_nrpe!check_winfile2!'\\cloudmxxprs\\backupap\\TFCFPO\\err'!0!1
+        check_interval                  720
+        check_period                    24x7
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           720
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+		
