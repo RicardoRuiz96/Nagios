@@ -1115,23 +1115,6 @@ define service{
         contact_groups                  admins
         contacts                        aponce,LRcharras,scharras
         }
-define service{
-        use                             generic-service
-       host_name                        Charras
-        service_description             Charras.Protheus.PRB.WS
-        check_command                   check_protheus!10016!
-        check_interval                  10
-        check_period                    24x7
-        check_freshness                 1
-        freshness_threshold             900
-        notifications_enabled           1
-        notification_period             aspxprs
-        notification_interval           10
-        notification_options            w,u,c,r,f,s
-        register                        1
-        contact_groups                  admins
-        contacts                        aponce,LRcharras,scharras
-        }         
 
 
 define service{
