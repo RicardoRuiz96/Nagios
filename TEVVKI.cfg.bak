@@ -30,7 +30,7 @@ define host{
         host_name               Charras.CFDI
         alias                   Charras.CFDI
         address                 10.195.45.15
-        check_command           check-rds-1326
+        check_command           check-rds-1336
         notifications_enabled   1
         check_interval          3
         notification_period     24x7
@@ -62,7 +62,7 @@ define host{
         host_name               Charras.INTRA
         alias                   Charras.INTRA
         address                 10.195.45.14
-        check_command           check-rds-1325
+        check_command           check-rds-1335
         notifications_enabled   1
         check_interval          3
         notification_period     24x7
@@ -89,14 +89,14 @@ define host{
         contacts                aponce,LRcharras,scharras
         }
 
-define host{
-        use                 linux-server          
-        host_name           Charras.DB
-        alias               Charras.ORACLE
-        address             10.195.45.20
-	parents	   	    Charras
-        check_command	    check_tcp!1221
-	}
+#define host{
+#        use                 linux-server          
+#        host_name           Charras.DB
+#        alias               Charras.ORACLE
+#        address             10.195.45.20
+#	parents	   	    Charras
+#        check_command	    check_tcp!1221
+#	}
 
 			
 ###############################################################################					
