@@ -1,0 +1,521 @@
+					
+###############################################################################					
+#					
+# HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Define a host for the Windows machine well be monitoring					
+# Change the host_name, alias, and address to fit your situation					
+					
+					
+###############################################################################					
+#					
+# HOST GROUP DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+# Define a hostgroup for Windows machines					
+# All hosts that use the windows-server template will automatically be a member of this group					
+
+###############################################################################					
+#					
+# SERVICEGROUPS DEFINITIONS					
+#					
+###############################################################################					
+
+define servicegroup{
+	servicegroup_name	Salog
+	alias			Salog
+
+	members			Produccion.Peru,Salog.Produccion.BRK.P12
+	members			Produccion.Peru,Salog.Produccion.BRK1.P12
+
+	members			Produccion.Peru,Salog.Pruebas.P12
+	members			Pruebas,Salog.Desarrollo.P12
+
+	members			Pruebas,Salog.Protheus.Desarrollo
+	members			Produccion.Peru,Salog.Protheus.Pruebas
+
+	members			Produccion.Peru,Salog.Protheus.BK1
+
+	#members			Produccion.Peru,Salog.DBAccess
+	members			Produccion.Peru,Salog.Licencias
+
+	members			Produccion.Peru,Salog.BackupDB
+	members			Produccion.Peru,Salog.BackupAP
+	members			Produccion.Peru,Salog.ErrorBKP
+	
+	members			Produccion.Peru,Salog.RPO
+	}					
+					
+###############################################################################					
+###############################################################################					
+#					
+# GENERIC SERVICE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+# Create a service for monitoring the version of NSCLient++ that is installed					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# UPTIME HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# NTP TIME DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CPU LOAD DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# MEMORY HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# DISK USAGE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# WEB SERVICES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# EXPRESS DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# TEST DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS EXPRESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.Produccion.BRK.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.25_TFBLL2_PROD_1242_SALOG_BRK
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+define service{
+        use                             generic-service
+        host_name                       Produccion.Peru
+        service_description             Salog.Produccion.BRK1.P12
+        check_command                   check_nt!SERVICESTATE!-d SHOWALL -l P12.33_TFBLL2_PROD_1241_SALOG_BRK1
+        check_interval                  3
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+
+					
+					
+###############################################################################								
+###############################################################################
+#
+# ENVIRONMENT CHECKS DEFINITIONS
+#
+###############################################################################
+###############################################################################	
+
+
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.Protheus.BK1
+	check_command			check_protheus!1241!
+	check_interval			10
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.Protheus.Pruebas
+	check_command			check_protheus!1219!
+	check_interval			10
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Salog.Protheus.Desarrollo
+	check_command			check_protheus!1271!
+	check_interval			10
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}	
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS TEST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Salog.Desarrollo.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.14_TFBLL2_DES_1271_SALOG
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+
+	
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.Pruebas.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.33_TFBLL2_TST_1219_SALOG
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# SMARTCLIENT HTML DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+			
+###############################################################################					
+###############################################################################					
+#					
+# DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+#define service{
+#	use				generic-service
+#	host_name			Produccion.Peru
+#	service_description		Salog.DBAccess
+#	check_command			check_nt!SERVICESTATE!-d SHOWALL -l DBACCESS_TFBLL2
+#	check_interval			3
+#	check_period			24x7
+#	check_freshness			1
+#	freshness_threshold		900
+#	notifications_enabled		1
+#	notification_period		aspxprs
+#	notification_interval		10
+#	notification_options		w,u,c,r,f,s
+#	register			1
+#	contact_groups			admins
+#	contacts			aponce
+#	}
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# LICENSE SERVERS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.Licencias
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l LSVSalog
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# DATABASE BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.BackupDB
+	check_command			check_backup!CheckFiles!path='C:\\totvs\\backupdb\\TFBLL2'!pattern='*TFBLL2*.tcdb'!"filter=written > -1d and size gt 4194304b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# APPLICATION BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.BackupAP
+	check_command			check_backup!CheckFiles!path='C:\\totvs\\backup\\TFBLL2'!pattern='*TFBLL2*.tcab'!"filter=written > -1d and size gt 4194304b"!max-dir-depth=1!MinCrit=0
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+					
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.ErrorBKP
+	check_command			check_nrpe!check_winfile2!'C:\\totvs\\backup\\TFBLL2\\err'!0!1
+	check_interval			480
+	check_period			24x7
+	check_freshness			1
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# RPO FILES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Produccion.Peru
+	service_description		Salog.RPO
+	check_command			check_nrpe!check_winfile!'C:\\totvs\\erproot\\TFBLL2\\protheus12\\apo'!13!14
+	check_interval			480
+	check_period			24x7
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# APPSERVER.EXE MEMORY DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS GENERAL STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# FLUIG SERVICES STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+#					
+# BACKUP ERROR STATUS DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+					
