@@ -1,0 +1,636 @@
+					
+###############################################################################					
+#					
+# HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Define a host for the Windows machine well be monitoring					
+# Change the host_name, alias, and address to fit your situation					
+
+define host{
+	use				windows-server
+	host_name			Kinetic.Tst
+	alias				Kinetic.Tst
+	address				10.195.34.75
+	check_command			check-rds-host-alive
+	notifications_enabled		1
+	check_interval			3
+	notification_period		24x7
+	notification_interval		5
+	notification_options		d,u,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+					
+###############################################################################					
+#					
+# HOST GROUP DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+# Define a hostgroup for Windows machines					
+# All hosts that use the windows-server template will automatically be a member of this group					
+
+###############################################################################					
+#					
+# SERVICEGROUPS DEFINITIONS					
+#					
+###############################################################################					
+
+define servicegroup{
+	servicegroup_name	Kinetic
+	alias			Kinetic
+	
+	members			Pruebas,Kinetic.Desarrollo.P12,Pruebas,Kinetic.Pruebas.P12
+        members                 Pruebas,Kinetic.Protheus.Pruebas,Pruebas,Kinetic.Protheus.Desarrollo
+
+	members			Pruebas,Kinetic.Pruebas.RPO
+
+    	members        	        DBAccess01,Kinetic.DBAccess,Licencias,Kinetic.Licencias
+	
+	members			Kinetic.Tst,Kinetic.Tst.NSClientVersion,Kinetic.Tst,Kinetic.Tst.Uptime
+	members			Kinetic.Tst,Kinetic.Tst.Time,Kinetic.Tst,Kinetic.Tst.CPULoad
+	members			Kinetic.Tst,Kinetic.Tst.MemoryUsage
+	members			Kinetic.Tst,Kinetic.Tst.DriveC,Kinetic.Tst,Kinetic.Tst.DriveZ
+	
+	members			Kinetic.Tst,Kinetic.Tst.Fluig
+	members			Kinetic.Tst,Kinetic.Tst.FluigIndexer,Kinetic.Tst,Kinetic.Tst.FluigRealTime
+
+
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# GENERIC SERVICE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+# Create a service for monitoring the version of NSCLient++ that is installed					
+# Change the host_name to match the name of the host you defined above					
+					
+###############################################################################
+###############################################################################
+#
+# GENERIC SERVICE DEFINITIONS PRUEBAS
+#
+###############################################################################
+###############################################################################
+
+define service{
+	use						generic-service
+	host_name				Kinetic.Tst
+	service_description		Kinetic.Tst.NSClientVersion
+	check_command			check_nt!CLIENTVERSION
+	notifications_enabled	1
+	notification_period		24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register				1
+	contact_groups			admins
+	contacts				aponce
+	}
+
+define service{
+	use						generic-service
+	host_name				Kinetic.Tst
+	service_description		Kinetic.Tst.Uptime
+	check_command			check_nt!UPTIME
+	notifications_enabled	1
+	notification_period		24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register				1
+	contact_groups			admins
+	}
+
+define service{
+	use						generic-service
+	host_name				Kinetic.Tst
+	service_description		Kinetic.Tst.Time
+	check_command			check_nrpewin!check_ntp_time
+	check_interval			10
+	notifications_enabled	1
+	notification_period		24x7
+	notification_interval	30
+	notification_options	w,u,c,r,f,s
+	register				1
+	contact_groups			admins
+	contacts				aponce
+	}
+
+define service{
+	use						generic-service
+	host_name				Kinetic.Tst
+	service_description		Kinetic.Tst.CPULoad
+	check_command			check_nt!CPULOAD!-l 5,80,90
+	notifications_enabled	1
+	notification_period		24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register				1
+	contact_groups			admins
+	contacts				aponce
+	}
+
+define service{
+	use						generic-service
+	host_name				Kinetic.Tst
+	service_description		Kinetic.Tst.MemoryUsage
+	check_command			check_nt!MEMUSE!-w 85 -c 95
+	notifications_enabled	1
+	notification_period		24x7
+	notification_interval	10
+	notification_options	w,u,c,r,f,s
+	register				1
+	contact_groups			admins
+	contacts				aponce
+	}
+
+define service{
+	use				generic-service
+	host_name			Kinetic.Tst
+	service_description		Kinetic.Tst.DriveC
+	check_command			check_nt!USEDDISKSPACE!-l c -w 90 -c 95
+	check_interval			3
+	notifications_enabled		1
+	notification_period		24x7
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+define service{
+        use                             generic-service
+        host_name                       Kinetic.Tst
+        service_description             Kinetic.Tst.DriveZ
+        check_command                   check_nt!USEDDISKSPACE!-l z -w 90 -c 95
+        check_interval                  3
+        notifications_enabled           1
+        notification_period             24x7
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+					
+###############################################################################					
+###############################################################################					
+#					
+# UPTIME HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# NTP TIME DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CPU LOAD DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# MEMORY HOST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# DISK USAGE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# WEB SERVICES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+# Change the host_name to match the name of the host you defined above					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# EXPRESS DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# TEST DATABASE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS EXPRESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+		
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS CORPORATE DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+define service{
+	use				generic-service
+	host_name			Produccion
+	service_description		Kinetic.Produccion.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.27_TFBSW7_PRD_1220_KINETIC
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+	
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS TEST DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Kinetic.Desarrollo.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.27_TFBSW7_DES_1304_KINETIC
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Kinetic.Pruebas.P12
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l P12.27_TFBSW7_TST_1303_KINETIC
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################
+#
+# ENVIRONMENT TST  CHECKS DEFINITIONS
+#
+###############################################################################
+
+define service{
+        use                             generic-service
+        host_name                       Produccion
+        service_description             Kinetic.Protheus.Produccion
+        check_command                   check_protheus!1220!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+		
+define service{
+        use                             generic-service
+        host_name                       Pruebas
+        service_description             Kinetic.Protheus.Pruebas
+        check_command                   check_protheus!1303!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+define service{
+        use                             generic-service
+        host_name                       Pruebas
+        service_description             Kinetic.Protheus.Desarrollo
+        check_command                   check_protheus!1304!
+        check_interval                  10
+        check_period                    24x7
+        check_freshness                 1
+        freshness_threshold             900
+        notifications_enabled           1
+        notification_period             aspxprs
+        notification_interval           10
+        notification_options            w,u,c,r,f,s
+        register                        1
+        contact_groups                  admins
+        contacts                        aponce
+        }
+
+###############################################################################					
+###############################################################################					
+#					
+# SMARTCLIENT HTML DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+define service{
+	use				generic-service
+	host_name			DBAccess01
+	service_description		Kinetic.DBAccess
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l DBACCESS_TFBSW7
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}					
+					
+###############################################################################					
+###############################################################################					
+#					
+# CORPORATE DBACCESS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# LICENSE SERVERS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+define service{
+	use				generic-service
+	host_name			Licencias
+	service_description		Kinetic.Licencias
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l TOTVSLicKinetic
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+###############################################################################					
+###############################################################################					
+#					
+# DATABASE BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+###############################################################################					
+###############################################################################					
+#					
+# APPLICATION BACKUP DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+
+###############################################################################					
+###############################################################################					
+#					
+# RPO FILES DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+
+###############################################################################
+###############################################################################
+#
+# TEST RPO FILES DEFINITIONS
+#
+###############################################################################
+###############################################################################
+
+define service{
+	use				generic-service
+	host_name			Pruebas
+	service_description		Kinetic.Pruebas.RPO
+	check_command			check_nrpe!check_winfile!'e:\\Outsourcing\\Clientes\\TFBSW7\\protheus12\\apo'!2!3
+	check_interval			480
+	check_period			24x7
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		480
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+					
+###############################################################################					
+###############################################################################					
+#					
+# APPSERVER.EXE MEMORY DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# PROTHEUS GENERAL STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+					
+					
+###############################################################################					
+###############################################################################					
+#					
+# FLUIG SERVICES STATUS DEFINITIONS					
+#					
+###############################################################################					
+###############################################################################					
+
+
+	define service{
+	use				generic-service
+	host_name			Kinetic.Tst
+	service_description		Kinetic.Tst.Fluig
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+
+	define service{
+	use				generic-service
+	host_name			Kinetic.Tst
+	service_description		Kinetic.Tst.FluigIndexer
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig_Indexer
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}
+	
+	define service{
+	use				generic-service
+	host_name			Kinetic.Tst
+	service_description		Kinetic.Tst.FluigRealTime
+	check_command			check_nt!SERVICESTATE!-d SHOWALL -l fluig_RealTime
+	check_interval			3
+	check_period			24x7
+	check_freshness			1
+	freshness_threshold		900
+	notifications_enabled		1
+	notification_period		aspxprs
+	notification_interval		10
+	notification_options		w,u,c,r,f,s
+	register			1
+	contact_groups			admins
+	contacts			aponce
+	}	
+					
+					
+###############################################################################					
+#					
+# BACKUP ERROR STATUS DEFINITIONS					
+#					
+###############################################################################					
+					
+					
+
+		
