@@ -908,7 +908,7 @@ define service{
         use                             generic-service
         host_name                       Charras.SQL
         service_description             Charras.SQL.InstanceMemory
-        check_command                   check_mssql!49766!nagios!TRx2a*]X!total-server-memory!14680064!16777216
+        check_command                   check_mssql!49766!nagios!TRx2a*]X!total-server-memory!18680064!19777216
         check_interval                  5
         notifications_enabled           1
         notification_period             24x7
